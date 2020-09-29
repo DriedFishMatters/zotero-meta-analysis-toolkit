@@ -60,12 +60,12 @@ def cli(ctx, key, library_id, library_type, tag_filter):
 def get_tags(ctx, match, output):
     """Print a list of tags in the library that match the input prefix.
 
-    Tags are filtered to include or exclude those that match the prefix strings given. Each match is checked 
-    at the beginning of the string (left-to-right).
+    Tags are filtered to include or exclude those that match the prefix strings
+    given. Each match is checked at the beginning of the string (left-to-right).
 
     OUTPUT can be a filename or `-` to print to stdout.
     """
-    
+
     zot = zotero.Zotero(ctx.obj['library_id'], ctx.obj['library_type'],
                     ctx.obj['key'])
     t = zot.everything(zot.tags(q=match, qmode='startsWith'))
@@ -79,10 +79,12 @@ def get_tags(ctx, match, output):
 def apply_category_tags(ctx, tag, input):
     """Apply category tags to items matching tags listed in INPUT.
 
-    INPUT should contain a list of tags, separated by newlines. INPUT can be a filename or `-` to read from stdin.
-    References matching any of the tags in that list will be tagged in the Zotero library with the additional tag 
-    specified with `--tag`. For example, INPUT could contain a list of Asian country names, in which case all 
-    library items tagged with one of those country names could additionally be given the tag "ASIA":
+    INPUT should contain a list of tags, separated by newlines. INPUT can be a
+  filename or `-` to read from stdin. References matching any of the tags in
+  that list will be tagged in the Zotero library with the additional tag
+  specified with `--tag`. For example, INPUT could contain a list of Asian
+  country names, in which case all library items tagged with one of those
+  country names could additionally be given the tag "ASIA":
 
         python zma.py [OPTIONS] --tag ASIA asian-countries.txt
     """
@@ -138,10 +140,12 @@ def find_missing_tags(ctx, match, local, remote, tags_list):
 @click.argument('input', type=click.File('rb'))
 @click.argument('output')
 def graph(input, output):
-    """Generate a graph from a csv file (or stream via stdin) as INPUT and write to OUTPUT.
+    """Generate a graph from a csv file (or stream via stdin) as INPUT and
+    write to OUTPUT.
 
-    This function, which uses Pandas to create a simple horizontal bar graph, is mainly intended for use in 
-    piping output from a Zotero query. More advanced analyses and visualizations can be constructed using Pandas directly.
+    This function, which uses Pandas to create a simple horizontal bar graph, is
+    mainly intended for use in piping output from a Zotero query. More advanced
+    analyses and visualizations can be constructed using Pandas directly.
     """
 
     df = pd.read_csv(input).set_index('tag')
@@ -159,14 +163,16 @@ def get_union(ctx, tag_x, tag_y, output):
 
     Each of TAG_X and TAG_Y is a list of tags, separated by newlines.
 
-    Use the `--filter-tag` argument as a global filter to limit the results to
-    items that match a specific tag or tagss (this argument can be specified more than
-    once, in which case ALL tags must be matched to be included in the result set). To exclude items that match a given 
-    tag, use a negative operator prefix (e.g., "-tag to exclude").
+    Use the `--tag--filter` argument as a global filter to limit the results to
+    items that match a specific tag or tags (this argument can be specified more
+    than once, in which case ALL tags must be matched to be included in the
+    result set). To exclude items that match a given tag, use a negative
+    operator prefix (e.g., "-tag to exclude").
 
     Example:
 
-        python zma.py [OPTIONS] --tag-filter="#RELEVANCE: Direct" --tag-filter "-#exclude" get_union x.txt y.txt out.csv
+        python zma.py [OPTIONS] --tag-filter="#RELEVANCE: Direct" --tag-filter \
+        "-#exclude" get_union x.txt y.txt out.csv
     """
 
     tags_x = tag_x.read().splitlines()
@@ -198,7 +204,8 @@ def get_union(ctx, tag_x, tag_y, output):
 def list_journals(ctx, start_date, end_date, output):
     """Write a table showing journal frequencies.
 
-    Tag filters can be used to limit results. The filter argument can only be specified once, otherwise it will be ignored.
+    Tag filters can be used to limit results. The filter argument can only be
+    specified once, otherwise it will be ignored.
     """
     pubs = {}
     end = dateparse(end_date, ignoretz=True)
