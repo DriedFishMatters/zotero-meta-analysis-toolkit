@@ -104,7 +104,6 @@ def apply_category_tags(ctx, tag, input):
 
 @cli.command()
 @click.pass_context
-@click.option('--match', default='', help='Prefix string to match')
 @click.option('--local', default='missing-local.txt',
                 help='Output for missing local tags', show_default=True)
 @click.option('--remote',
@@ -117,14 +116,12 @@ def find_missing_tags(ctx, match, local, remote, tags_list):
     Prints missing tags to two plain text files, by default "missing-local.txt"
     and "missing-remote.txt".
 
-    Tags can be filtered using the `--match` option, which looks for remote
-    tags that match the prefix string supplied as an argument to that option.
     """
 
     local_tags = tags_list.read().splitlines()
     zot = zotero.Zotero(ctx.obj['library_id'], ctx.obj['library_type'],
                     ctx.obj['key'])
-    remote_tags = zot.everything(zot.tags(q=match, qmode='startsWith'))
+    remote_tags = zot.everything(zot.tags(q=ctx.obj['tag_filter'], qmode='startsWith'))
 
     local_only = [l for l in local_tags if not l in remote_tags]
     remote_only = [r for r in remote_tags if not r in local_tags]
