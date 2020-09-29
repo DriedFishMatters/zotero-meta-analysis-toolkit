@@ -55,7 +55,6 @@ def cli(ctx, key, library_id, library_type, tag_filter):
 
 @cli.command()
 @click.pass_context
-@click.option('--match', help='Prefix string to match')
 @click.argument('output', type=click.File("w"))
 def get_tags(ctx, match, output):
     """Print a list of tags in the library that match the input prefix.
@@ -68,7 +67,7 @@ def get_tags(ctx, match, output):
 
     zot = zotero.Zotero(ctx.obj['library_id'], ctx.obj['library_type'],
                     ctx.obj['key'])
-    t = zot.everything(zot.tags(q=match, qmode='startsWith'))
+    t = zot.everything(zot.tags(q=ctx.obj['tag_filter'], qmode='startsWith'))
     output.write('\n'.join(sorted(t)))
 
 
