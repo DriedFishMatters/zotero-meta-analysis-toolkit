@@ -26,7 +26,7 @@ import click
 from pyzotero import zotero
 import unicodecsv as csv
 import pandas as pd
-
+import matplotlib.pyplot as plt
 
 # def _strip_tag_prefix(tag):
 #     new_tag = tag.strip('!@#$%^&*_')
@@ -37,7 +37,7 @@ import pandas as pd
 
 # Initialize the command line interface
 # These can be written into a script and run from there...
-@click.group()
+@click.group(chain=True)
 @click.option('--key', prompt=True, hide_input=True, required=True)
 @click.option('--library-id', required=True)
 @click.option('--library-type', required=True,
@@ -79,11 +79,11 @@ def apply_category_tags(ctx, tag, input):
     """Apply category tags to items matching tags listed in INPUT.
 
     INPUT should contain a list of tags, separated by newlines. INPUT can be a
-  filename or `-` to read from stdin. References matching any of the tags in
-  that list will be tagged in the Zotero library with the additional tag
-  specified with `--tag`. For example, INPUT could contain a list of Asian
-  country names, in which case all library items tagged with one of those
-  country names could additionally be given the tag "ASIA":
+    filename or `-` to read from stdin. References matching any of the tags in
+    that list will be tagged in the Zotero library with the additional tag
+    specified with `--tag`. For example, INPUT could contain a list of Asian
+    country names, in which case all library items tagged with one of those
+    country names could additionally be given the tag "ASIA":
 
         python zma.py [OPTIONS] --tag ASIA asian-countries.txt
     """
@@ -146,6 +146,7 @@ def graph(input, output):
 
     df = pd.read_csv(input).set_index('tag')
     u = df.plot.barh()
+    plt.tight_layout()
     u.figure.savefig(output)
 
 
@@ -168,7 +169,7 @@ def get_union(ctx, tag_x, tag_y, output):
     Example:
 
         python zma.py [OPTIONS] --tag-filter="#RELEVANCE: Direct" --tag-filter \
-        "-#exclude" get_union x.txt y.txt out.csv
+        "-#exclude" get-union x.txt y.txt out.csv
     """
 
     tags_x = tag_x.read().splitlines()
@@ -185,7 +186,8 @@ def get_union(ctx, tag_x, tag_y, output):
         row = {'tag': y}
         for x in tags_x:
             t = zot.everything(zot.items(tag=[x,y] + ctx.obj['tag_filter'],
-                format='versions'))
+                format='versions',
+                limit=None))
             row[x] = len(t)
         rows.append(row)
 
