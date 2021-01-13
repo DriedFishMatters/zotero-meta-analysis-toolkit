@@ -25,8 +25,6 @@ from dateutil.parser import parse as dateparse
 import click
 from pyzotero import zotero
 import unicodecsv as csv
-import pandas as pd
-import matplotlib.pyplot as plt
 
 # def _strip_tag_prefix(tag):
 #     new_tag = tag.strip('!@#$%^&*_')
