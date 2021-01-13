@@ -133,24 +133,6 @@ def find_missing_tags(ctx, match, local, remote, tags_list):
         out.write('\n'.join(sorted(remote_only)))
 
 @cli.command()
-@click.argument('input', type=click.File('rb'))
-@click.argument('output')
-def graph(input, output):
-    """Generate a graph from a csv file (or stream via stdin) as INPUT and
-    write to OUTPUT.
-
-    This function, which uses Pandas to create a simple horizontal bar graph, is
-    mainly intended for use in piping output from a Zotero query. More advanced
-    analyses and visualizations can be constructed using Pandas directly.
-    """
-
-    df = pd.read_csv(input).set_index('tag')
-    u = df.plot.barh()
-    plt.tight_layout()
-    u.figure.savefig(output)
-
-
-@cli.command()
 @click.pass_context
 @click.argument('tag_x', type=click.File('r'))
 @click.argument('tag_y', type=click.File('r'))
