@@ -3,7 +3,7 @@
     Command-line tool to support meta-analysis using a library managed in
     Zotero.
 
-    Copyright 2019-2020, Eric Thrift
+    Copyright 2019-2021, Eric Thrift
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import matplotlib.pyplot as plt
 # Initialize the command line interface
 # These can be written into a script and run from there...
 @click.group(chain=True)
-@click.option('--key', prompt=True, hide_input=True, required=True)
+@click.option('--key', required=False) # not required for read-only
 @click.option('--library-id', required=True)
 @click.option('--library-type', required=True,
         type=click.Choice(['user', 'group']))
