@@ -52,19 +52,15 @@ def _filter_tags(tags, prefixes):
         type=click.Choice(['user', 'group']))
 @click.option('--tag-filter', default=[], multiple=True,
                 help="Tag to include/exclude in queries")
-@click.option('--print-tag', default=[], multiple=True,
-                help="List of tags to include in bibliography output")
 @click.option('--collection-id', required=False,
                 help="ID of a collection from which to create a bibliography")
 @click.pass_context
-def cli(ctx, key, library_id, library_type, tag_filter, collection_id,
-        print_tag):
+def cli(ctx, key, library_id, library_type, tag_filter, collection_id):
     ctx.ensure_object(dict)
     ctx.obj['key'] = key
     ctx.obj['library_id'] = library_id
     ctx.obj['library_type'] = library_type
     ctx.obj['tag_filter'] = list(tag_filter)
-    ctx.obj['print_tag'] = list(print_tag)
     ctx.obj['collection_id'] = collection_id
 
 
@@ -87,8 +83,10 @@ def get_tags(ctx, output):
 
 @cli.command()
 @click.pass_context
+@click.option('--print-tag', default=[], multiple=True,
+                help="List of tags to include in bibliography output")
 @click.argument('output', type=click.File("w"))
-def get_bibliography(ctx, output):
+def print_bibliography(ctx, print_tag, output):
     """Print an html bibliography for a given collection, with tags listed
     beneath each entry.
 
@@ -98,8 +96,8 @@ def get_bibliography(ctx, output):
 
     Example:
         python zma.py --library-type group --library-id 2183860 /
-        --collection-id 27MV6NK5 --print-tag "#THEME:" --print-tag "+" /
-        get-bibliography zotero.html
+        --collection-id 27MV6NK5 print-bibliography /
+        --print-tag "#THEME:" --print-tag "+" zotero.html
     """
 
     zot = zotero.Zotero(ctx.obj['library_id'], ctx.obj['library_type'],
@@ -108,9 +106,9 @@ def get_bibliography(ctx, output):
                 include='bib,data', style='mla', linkwrap='1'))
     t = sorted(t, key=lambda i: i['bib'])
     for i in t:
-        if ctx.obj['print_tag']:
+        if print_tag:
             tags = _filter_tags([k['tag'] for k in i['data']['tags']],
-                            ctx.obj['print_tag'])
+                            print_tag)
         else:
             tags = i['data']['tags']
         output.write(i['bib'])

@@ -75,12 +75,12 @@ return items that have tags beginning with either "foo" or "bar").
 
 ## Commands
 
-### `get_tags`
+### `get-tags`
 
 Usage:
 
 ```
-  python zma.py [OPTIONS] get_tags OUTPUT
+  python zma.py [OPTIONS] get-tags OUTPUT
 ```
 
 Print a list of tags in the library.
@@ -90,13 +90,35 @@ given with `--tag-filter`; otherwise all tags are returned.
 
 `OUTPUT` can be a filename or `-` to print to stdout.
 
-
-### `apply_category_tags`
+### `print-bibliography`
 
 Usage:
 
 ```
-   python zma.py [OPTIONS] apply_category_tags --tag TEXT INPUT
+  python zma.py [OPTIONS] print-bibliography [--print-tag TAG]... OUTPUT
+```
+
+Print an html bibliography for a given collection, with tags listed
+beneath each entry.
+
+Tags can be filtered by providing tag prefixes through `--print-tag`.
+
+OUTPUT can be a filename or `-` to print to stdout.
+
+Example:
+
+```
+    python zma.py --library-type group --library-id 2183860 /
+    --collection-id 27MV6NK5 print-bibliography /
+    --print-tag "#THEME:" --print-tag "+" zotero.html
+```
+
+### `apply-category-tags`
+
+Usage:
+
+```
+   python zma.py [OPTIONS] apply-category-tags --tag TEXT INPUT
 ```
 
 Apply category tags to items matching tags listed in `INPUT`.
@@ -109,15 +131,15 @@ country names, in which case all library items tagged with one of those
 country names could additionally be given the tag "ASIA":
 
 ```
-  python zma.py [OPTIONS] apply_category_tags --tag ASIA asian-countries.txt
+  python zma.py [OPTIONS] apply-category-tags --tag ASIA asian-countries.txt
 ```
 
-### `find_missing_tags`
+### `find-missing-tags`
 
 Usage:
 
 ```
-  zma.py [OPTIONS] find_missing_tags [--local FILE] [--remote FILE] TAGS_LIST
+  zma.py [OPTIONS] find-missing-tags [--local FILE] [--remote FILE] TAGS_LIST
 ```
 
 Compare a list of tags to those in the library.
@@ -132,12 +154,12 @@ files to check, one per line. Use the `get_tags` command to generate a baseline
 list as needed.
 
 
-### `get_union`
+### `get-union`
 
 Usage:
 
 ```
-  zma.py [OTPIONS] graph TAG_X TAG_Y OUTPUT
+  zma.py [OTPIONS] get-union TAG_X TAG_Y OUTPUT
 ```
 
 Generate a CSV file containing an array of tag correlations.
@@ -153,32 +175,15 @@ Example:
 
 ```
   zma.py [OPTIONS] --tag-filter="#RELEVANCE: Direct" --tag-filter \
-    "-#exclude" get_union x.txt y.txt out.csv
+    "-#exclude" get-union x.txt y.txt out.csv
 ```
 
-### `graph`
+### `list-journals`
 
 Usage:
 
 ```
-  zma.py [OPTIONS] graph INPUT OUTPUT
-```
-
-Generate a graph from a CSV file (or stream via stdin) provided as `INPUT` and
-write the image to `OUTPUT`.
-
-This function, which uses Pandas to create a simple horizontal bar graph, is
-mainly intended for use in piping output from a `get_union` query. More advanced
-analyses and visualizations can be constructed using Pandas directly. `OUTPUT`
-can be the filename for an image (e.g., `output.png`) or document (e.g.,
-`output.pdf`); the filename will control the nature of the output.
-
-### `list_journals`
-
-Usage:
-
-```
-  zma.py [OPTIONS] list_journals [--start-date DATE] [--end-date DATE] OUTPUT
+  zma.py [OPTIONS] list-journals [--start-date DATE] [--end-date DATE] OUTPUT
 ```
 
 Write a table showing journal frequencies. `OUTPUT` will be a CSV file
@@ -195,7 +200,7 @@ ambiguous.
 
 ## Copying
 
-Copyright 2020, Eric Thrift
+Copyright 2020-2022, Eric Thrift
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -212,7 +217,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Credits
 
-This script was originally written for the 
-[Dried Fish Matters](https://driedfishmatters.org) project, supported 
-by the [Social Sciences and Humanities Research Council of 
+This script was originally written for the
+[Dried Fish Matters](https://driedfishmatters.org) project, supported
+by the [Social Sciences and Humanities Research Council of
 Canada](http://sshrc-crsh.gc.ca).
