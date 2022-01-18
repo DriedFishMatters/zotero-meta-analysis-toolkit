@@ -32,6 +32,16 @@ import unicodecsv as csv
 #         return tag
 #     return new_tag
 
+def _filter_tags(tags, prefixes):
+    out = []
+    for tag in tags:
+        for prefix in prefixes:
+            if tag.startswith(prefix):
+                out.append(tag)
+                break
+    return out
+
+
 
 # Initialize the command line interface
 # These can be written into a script and run from there...
@@ -42,19 +52,26 @@ import unicodecsv as csv
         type=click.Choice(['user', 'group']))
 @click.option('--tag-filter', default=[], multiple=True,
                 help="Tag to include/exclude in queries")
+@click.option('--print-tag', default=[], multiple=True,
+                help="List of tags to include in bibliography output")
+@click.option('--collection-id', required=False,
+                help="ID of a collection from which to create a bibliography")
 @click.pass_context
-def cli(ctx, key, library_id, library_type, tag_filter):
+def cli(ctx, key, library_id, library_type, tag_filter, collection_id,
+        print_tag):
     ctx.ensure_object(dict)
     ctx.obj['key'] = key
     ctx.obj['library_id'] = library_id
     ctx.obj['library_type'] = library_type
     ctx.obj['tag_filter'] = list(tag_filter)
+    ctx.obj['print_tag'] = list(print_tag)
+    ctx.obj['collection_id'] = collection_id
 
 
 @cli.command()
 @click.pass_context
 @click.argument('output', type=click.File("w"))
-def get_tags(ctx, match, output):
+def get_tags(ctx, output):
     """Print a list of tags in the library that match the input prefix.
 
     Tags are filtered to include or exclude those that match the prefix strings
@@ -68,6 +85,38 @@ def get_tags(ctx, match, output):
     t = zot.everything(zot.tags(q=ctx.obj['tag_filter'], qmode='startsWith'))
     output.write('\n'.join(sorted(t)))
 
+@cli.command()
+@click.pass_context
+@click.argument('output', type=click.File("w"))
+def get_bibliography(ctx, output):
+    """Print an html bibliography for a given collection, with tags listed
+    beneath each entry.
+
+    Tags can be filtered by providing tag prefixes through `--print-tag`.
+
+    OUTPUT can be a filename or `-` to print to stdout.
+
+    Example:
+        python zma.py --library-type group --library-id 2183860 /
+        --collection-id 27MV6NK5 --print-tag "#THEME:" --print-tag "+" /
+        get-bibliography zotero.html
+    """
+
+    zot = zotero.Zotero(ctx.obj['library_id'], ctx.obj['library_type'],
+                    ctx.obj['key'])
+    t = zot.everything(zot.collection_items_top(ctx.obj['collection_id'],
+                include='bib,data', style='mla', linkwrap='1'))
+    t = sorted(t, key=lambda i: i['bib'])
+    for i in t:
+        if ctx.obj['print_tag']:
+            tags = _filter_tags([k['tag'] for k in i['data']['tags']],
+                            ctx.obj['print_tag'])
+        else:
+            tags = i['data']['tags']
+        output.write(i['bib'])
+        output.write('<blockquote>')
+        output.write(', '.join(tags))
+        output.write('</blockquote>')
 
 @cli.command()
 @click.pass_context
