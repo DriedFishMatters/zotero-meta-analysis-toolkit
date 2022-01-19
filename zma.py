@@ -104,7 +104,8 @@ def print_bibliography(ctx, print_tag, output):
                     ctx.obj['key'])
     t = zot.everything(zot.collection_items_top(ctx.obj['collection_id'],
                 include='bib,data', style='mla', linkwrap='1'))
-    t = sorted(t, key=lambda i: i['bib'])
+    # sort by bibliography; lowercase entries to make the sort case-insensitive
+    t = sorted(t, key=lambda i: i['bib'].lower())
     for i in t:
         if print_tag:
             tags = _filter_tags([k['tag'] for k in i['data']['tags']],
