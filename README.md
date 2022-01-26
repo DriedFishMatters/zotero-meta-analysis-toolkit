@@ -144,14 +144,21 @@ Usage:
 
 Compare a list of tags to those in the library.
 
-Prints missing tags to two plain text files, by default "missing-local.txt" and
-"missing-remote.txt". The names of the output files can be set using the options
-`--local` (list of tags missing in the local tag list) and `--remote` (list of
-tags missing in the remote Zotero library).
+Prints lists of tags to two plain text files, by default "missing-user-
+tags.txt" (tags that are in the Zotero library but not in the user-supplied
+file) and "missing-zotero-tags.txt" (tags that are in the user-supplied
+file but not in the Zotero library).
 
 `TAGS_LIST` is the name of a plain-text file or stream containing a list of
 files to check, one per line. Use the `get_tags` command to generate a baseline
 list as needed.
+
+This function is intended to be used where there is an established
+codebook, and you wish to check whether (1) there are any unused tags in
+the codebook, and (2) there are any tags in the Zotero library that aren't
+documented in the codebook. If the tags in the codebook have a common
+prefix, results from the Zotero library can be filtered using the `--tag-
+filter` argument.
 
 
 ### `get-union`
