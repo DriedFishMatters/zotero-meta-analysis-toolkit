@@ -3,7 +3,7 @@
     Command-line tool to support meta-analysis using a library managed in
     Zotero.
 
-    Copyright 2019-2021, Eric Thrift
+    Copyright 2019-2022, Eric Thrift
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
