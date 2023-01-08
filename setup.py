@@ -12,7 +12,7 @@ setuptools.setup(
     description="Command-line tool to support basic meta-analysis using a library managed in Zotero",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/DriedFishMatters/zotero-meta-analysis-toolkit,
+    url="https://github.com/DriedFishMatters/zotero-meta-analysis-toolkit",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
