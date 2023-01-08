@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="zotero-meta-analysis-toolkit", 
+    name="zotero-meta-analysis-toolkit",
     version="0.0.1",
     author="Eric Thrift",
     author_email="dried.fish.matters@umanitoba.ca",

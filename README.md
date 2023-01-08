@@ -28,7 +28,7 @@ to the `get_union` command.
 ## Usage
 
   ```
-  $ zma.py [OPTIONS] COMMAND [ARGS]...
+    python zma.py [OPTIONS] COMMAND [ARGS]...
   ```
 
 ## Global options
@@ -139,7 +139,7 @@ country names could additionally be given the tag "ASIA":
 Usage:
 
 ```
-  zma.py [OPTIONS] find-missing-tags [--local FILE] [--remote FILE] TAGS_LIST
+  python zma.py [OPTIONS] find-missing-tags [--local FILE] [--remote FILE] TAGS_LIST
 ```
 
 Compare a list of tags to those in the library.
@@ -166,7 +166,7 @@ filter` argument.
 Usage:
 
 ```
-  zma.py [OTPIONS] get-union TAG_X TAG_Y OUTPUT
+  python zma.py [OTPIONS] get-union TAG_X TAG_Y OUTPUT
 ```
 
 Generate a CSV file containing an array of tag correlations.
@@ -181,7 +181,7 @@ result set).
 Example:
 
 ```
-  zma.py [OPTIONS] --tag-filter="#RELEVANCE: Direct" --tag-filter \
+  python zma.py [OPTIONS] --tag-filter="#RELEVANCE: Direct" --tag-filter \
     "-#exclude" get-union x.txt y.txt out.csv
 ```
 
@@ -190,7 +190,7 @@ Example:
 Usage:
 
 ```
-  zma.py [OPTIONS] list-journals [--start-date DATE] [--end-date DATE] OUTPUT
+  python zma.py [OPTIONS] list-journals [--start-date DATE] [--end-date DATE] OUTPUT
 ```
 
 Write a table showing journal frequencies. `OUTPUT` will be a CSV file
@@ -207,7 +207,7 @@ ambiguous.
 
 ## Copying
 
-Copyright 2020-2022, Eric Thrift
+Copyright 2020-2023, Eric Thrift
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
