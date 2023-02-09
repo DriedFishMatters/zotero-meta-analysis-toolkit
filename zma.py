@@ -142,7 +142,7 @@ def apply_category_tags(ctx, tag, input):
     for item in items:
         # skip if the item already has this tag; otherwise update
         if not any(t['tag'] == tag for t in item['data']['tags']):
-            click.echo('UPDATING {}'.format(item['data'].get('title')))
+            click.echo('UPDATING {}'.format(item['data'].get('title', '[untitled item]')))
             zot.add_tags(item, tag)
 
 
